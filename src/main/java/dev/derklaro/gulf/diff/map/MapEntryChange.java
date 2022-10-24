@@ -32,23 +32,23 @@ import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-public class MapEntryChange<K, V> extends KeyedChange<K, V> {
+public final class MapEntryChange<K, V> extends KeyedChange<K, V> {
 
-  private final Collection<Change<V>> entryChanges;
+  private final Collection<Change<V>> changes;
 
   public MapEntryChange(
     @NonNull ObjectPath path,
     @NonNull K key,
     @Nullable V leftElement,
     @Nullable V rightElement,
-    @NonNull Collection<Change<V>> entryChanges
+    @NonNull Collection<Change<V>> changes
   ) {
     super(path, key, leftElement, rightElement);
-    this.entryChanges = ImmutableArrayList.fromCollection(entryChanges);
+    this.changes = ImmutableArrayList.fromCollection(changes);
   }
 
   @Unmodifiable
-  public @NonNull Collection<Change<V>> entryChanges() {
-    return this.entryChanges;
+  public @NonNull Collection<Change<V>> changes() {
+    return this.changes;
   }
 }

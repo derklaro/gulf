@@ -145,7 +145,7 @@ final class NestedCompareTest {
         MapEntryChange<Object, Object> mec = Assertions.assertInstanceOf(MapEntryChange.class, entryChange);
         Assertions.assertEquals("TestingA", mec.key());
 
-        Collection<Change<Object>> ec = mec.entryChanges();
+        Collection<Change<Object>> ec = mec.changes();
         CollectionChange<Object, ?> cc = Assertions.assertInstanceOf(CollectionChange.class, ec.iterator().next());
 
         Collection<IndexedChange<Object>> ccec = cc.elementChanges();

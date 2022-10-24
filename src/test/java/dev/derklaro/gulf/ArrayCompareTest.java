@@ -63,7 +63,7 @@ public class ArrayCompareTest {
     Assertions.assertSame(left, arr.leftElement());
     Assertions.assertSame(right, arr.rightElement());
 
-    Collection<IndexedChange<Object>> elementDiffs = arr.elementDiffs();
+    Collection<IndexedChange<Object>> elementDiffs = arr.elementChanges();
     Assertions.assertEquals(1, elementDiffs.size());
 
     IndexedChange<Object> idxChange = elementDiffs.iterator().next();
@@ -93,7 +93,7 @@ public class ArrayCompareTest {
     Assertions.assertSame(left, arr.leftElement());
     Assertions.assertSame(right, arr.rightElement());
 
-    Collection<IndexedChange<Object>> elementDiffs = arr.elementDiffs();
+    Collection<IndexedChange<Object>> elementDiffs = arr.elementChanges();
     Assertions.assertEquals(1, elementDiffs.size());
 
     IndexedChange<Object> idxChange = elementDiffs.iterator().next();
@@ -123,7 +123,7 @@ public class ArrayCompareTest {
     Assertions.assertSame(left, arr.leftElement());
     Assertions.assertSame(right, arr.rightElement());
 
-    Collection<IndexedChange<Object>> elementDiffs = arr.elementDiffs();
+    Collection<IndexedChange<Object>> elementDiffs = arr.elementChanges();
     Assertions.assertEquals(1, elementDiffs.size());
 
     IndexedChange<Object> idxChange = elementDiffs.iterator().next();

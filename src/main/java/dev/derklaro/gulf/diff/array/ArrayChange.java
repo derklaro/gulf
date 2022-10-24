@@ -31,21 +31,21 @@ import java.util.Collection;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ArrayChange<T> extends Change<T[]> {
+public final class ArrayChange<T> extends Change<T[]> {
 
-  private final Collection<IndexedChange<T>> elementDiffs;
+  private final Collection<IndexedChange<T>> elementChanges;
 
   public ArrayChange(
     @NonNull ObjectPath path,
     @Nullable T[] leftElement,
     @Nullable T[] rightElement,
-    @NonNull Collection<IndexedChange<T>> elementDiffs
+    @NonNull Collection<IndexedChange<T>> elementChanges
   ) {
     super(path, leftElement, rightElement);
-    this.elementDiffs = ImmutableArrayList.fromCollection(elementDiffs);
+    this.elementChanges = ImmutableArrayList.fromCollection(elementChanges);
   }
 
-  public @NonNull Collection<IndexedChange<T>> elementDiffs() {
-    return this.elementDiffs;
+  public @NonNull Collection<IndexedChange<T>> elementChanges() {
+    return this.elementChanges;
   }
 }
