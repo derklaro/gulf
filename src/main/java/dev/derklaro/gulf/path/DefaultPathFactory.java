@@ -40,7 +40,7 @@ public final class DefaultPathFactory implements ObjectPathFactory {
 
   @Override
   public @NonNull ObjectPath beginPath() {
-    return new ObjectPath(EMPTY_ELEMENTS, this);
+    return new ObjectPath(EMPTY_ELEMENTS, this.rootIndicator, this);
   }
 
   @Override

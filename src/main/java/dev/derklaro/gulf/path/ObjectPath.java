@@ -34,10 +34,12 @@ import org.jetbrains.annotations.Unmodifiable;
 public final class ObjectPath {
 
   private final String[] elements;
+  private final String currentSegment;
   private final ObjectPathFactory factory;
 
-  public ObjectPath(@NonNull String[] elements, @NonNull ObjectPathFactory factory) {
+  public ObjectPath(@NonNull String[] elements, @NonNull String currentSegment, @NonNull ObjectPathFactory factory) {
     this.elements = elements;
+    this.currentSegment = currentSegment;
     this.factory = factory;
   }
 
@@ -46,10 +48,14 @@ public final class ObjectPath {
     return ImmutableArrayList.fromArray(this.elements);
   }
 
+  public @NonNull String currentSegment() {
+    return this.currentSegment;
+  }
+
   @Contract(pure = true)
   public @NonNull ObjectPath append(@NonNull String element) {
     String[] newElements = ObjectPathUtil.addElement(this.elements, element);
-    return new ObjectPath(newElements, this.factory);
+    return new ObjectPath(newElements, element, this.factory);
   }
 
   public @NonNull String toFullPath() {
