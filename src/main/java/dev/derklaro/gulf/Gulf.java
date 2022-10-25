@@ -115,17 +115,11 @@ public final class Gulf {
   }
 
   public @NonNull Collection<Change<Object>> findChanges(@Nullable Object left, @Nullable Object right) {
-    // check if left and right are null - no change
-    if (left == null && right == null) {
-      return Changes.none();
-    } else {
-      Type type = left != null ? left.getClass() : right.getClass();
-      return this.findChanges(type, left, right);
-    }
+    return this.findChanges(null, left, right);
   }
 
   public @NonNull Collection<Change<Object>> findChanges(
-    @NonNull Type type,
+    @Nullable Type type,
     @Nullable Object left,
     @Nullable Object right
   ) {
@@ -133,21 +127,33 @@ public final class Gulf {
   }
 
   public @NonNull Collection<Change<Object>> findChanges(
-    @NonNull Type type,
+    @Nullable Type type,
     @NonNull ObjectPath path,
     @Nullable Object left,
     @Nullable Object right
   ) {
-    DiffFinder<Object> diffFinder = this.defaultDiffFinder;
+    // Check if both objects are null OR the type is specifically supplied
+    // While it's unusual that when both objects are null there is a diff, there might be some checker which finds the
+    // diff anyway, but we cannot detect the checker if both objects are null and no type is supplied, as the resolution
+    // of the checker based on the type is impossible
+    if (type == null && left == null && right == null) {
+      return Changes.none();
+    }
+
+    // get the supplied element type or get if off the supplied objects' type
+    Type objectType = Internals.nonNullOrGet(type, () -> Internals.getObjectType(left, right));
+
     // find the matching equality checker for the given type, use the fallback one if none matches
+    DiffFinder<Object> diffFinder = this.defaultDiffFinder;
     for (Map.Entry<TypeMatcher, DiffFinder<?>> entry : this.diffFinders) {
-      if (entry.getKey().test(type)) {
+      if (entry.getKey().test(objectType)) {
         //noinspection unchecked
         diffFinder = (DiffFinder<Object>) entry.getValue();
         break;
       }
     }
+
     // check the equality between the given objects
-    return diffFinder.findChanges(this, path, type, left, right);
+    return diffFinder.findChanges(this, path, objectType, left, right);
   }
 }

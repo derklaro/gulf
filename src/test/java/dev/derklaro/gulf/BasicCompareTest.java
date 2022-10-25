@@ -35,6 +35,15 @@ import org.junit.jupiter.api.Test;
 final class BasicCompareTest {
 
   @Test
+  void testNullCompare() {
+    Gulf gulf = Gulf.builder().build();
+
+    // no change
+    Collection<Change<Object>> changes = gulf.findChanges(null, null);
+    Assertions.assertTrue(changes.isEmpty());
+  }
+
+  @Test
   void testBooleanCompare() {
     Gulf gulf = Gulf.builder().build();
 

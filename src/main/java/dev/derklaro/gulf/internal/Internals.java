@@ -46,4 +46,13 @@ public final class Internals {
   public static @NonNull <T> T nonNullOrGet(@Nullable T first, @NonNull Supplier<T> second) {
     return first != null ? first : Objects.requireNonNull(second.get());
   }
+
+  public static @NonNull Class<?> getObjectType(@Nullable Object left, @Nullable Object right) {
+    // check that not both objects are null
+    if (left == null && right == null) {
+      throw new IllegalArgumentException("Both given objects are null, unable to determine type");
+    }
+    // use the type of the left or right object depending on which one is present
+    return left != null ? left.getClass() : right.getClass();
+  }
 }
