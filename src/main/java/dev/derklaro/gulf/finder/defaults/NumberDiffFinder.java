@@ -117,7 +117,7 @@ public final class NumberDiffFinder implements DiffFinder<Number> {
     // convert a non-floating number
     if (number instanceof Byte || number instanceof Short
       || number instanceof Integer || number instanceof Long) {
-      return new BigDecimal(number.longValue());
+      return BigDecimal.valueOf(number.longValue());
     }
 
     // ensure the correctness of floating-point numbers
