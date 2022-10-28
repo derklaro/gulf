@@ -95,8 +95,15 @@ final class NestedCompareTest {
     Gulf gulf = Gulf.builder().build();
     Collection<Change<Object>> changes = gulf.findChanges(left, right);
 
-    Assertions.assertEquals(3, changes.size());
+    Assertions.assertEquals(4, changes.size());
     Iterator<Change<Object>> changeIterator = changes.iterator();
+
+    // validate the change of the seedB int
+    validateNextChange(changeIterator, change -> {
+      Assertions.assertEquals("$.seedB.i", change.path().toFullPath());
+      Assertions.assertEquals(left.seedB().i(), change.leftElement());
+      Assertions.assertEquals(right.seedB().i(), change.rightElement());
+    });
 
     // validate the change of the seedB id
     validateNextChange(changeIterator, change -> {

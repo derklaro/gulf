@@ -30,12 +30,13 @@ import dev.derklaro.gulf.diff.Changes;
 import dev.derklaro.gulf.finder.DiffFinder;
 import dev.derklaro.gulf.path.ObjectPath;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class NumberDiffFinder implements DiffFinder<Number> {
-
-  private static final double TOLERANCE = 0.000000000000001D;
 
   @Override
   public @NonNull Collection<Change<Number>> findChangesNullSafe(
@@ -50,17 +51,27 @@ public final class NumberDiffFinder implements DiffFinder<Number> {
       return Changes.none();
     }
 
-    // convert both numbers to a double
-    double leftValue = left.doubleValue();
-    double rightValue = right.doubleValue();
+    // marker if the value changed
+    boolean changed;
 
-    // check if both values are NaN
-    if (Double.isNaN(leftValue) && Double.isNaN(rightValue)) {
-      return Changes.none();
+    // check if the number is special and needed extra handling
+    Boolean specialNumberCompareResult = this.compareSpecialNumber(left, right);
+    if (specialNumberCompareResult != null) {
+      changed = specialNumberCompareResult;
+    } else {
+      BigDecimal leftValue = this.toBigDecimal(left);
+      BigDecimal rightValue = this.toBigDecimal(right);
+
+      // compare both numbers, if possible
+      if (leftValue != null && rightValue != null) {
+        changed = leftValue.compareTo(rightValue) != 0;
+      } else {
+        // There might be an issue with converting one of the numbers
+        // If both numbers are null -> no change; If only one is null -> change
+        changed = !(leftValue == null && rightValue == null);
+      }
     }
 
-    // check if both values are equal to a very small degree
-    boolean changed = Math.copySign(leftValue - rightValue, 1.0) <= TOLERANCE;
     if (changed) {
       // the element changed
       Change<Number> change = new Change<>(path, left, right);
@@ -68,6 +79,58 @@ public final class NumberDiffFinder implements DiffFinder<Number> {
     } else {
       // no change
       return Changes.none();
+    }
+  }
+
+  private @Nullable Boolean compareSpecialNumber(@NonNull Number left, @NonNull Number right) {
+    if (left instanceof Double && right instanceof Double) {
+      double leftVal = left.doubleValue();
+      double rightVal = right.doubleValue();
+      // only compare now if the values are special
+      if (Double.isNaN(leftVal) || Double.isNaN(rightVal) || Double.isFinite(leftVal) || Double.isFinite(rightVal)) {
+        return Double.compare(leftVal, rightVal) != 0;
+      }
+    } else if (left instanceof Float && right instanceof Float) {
+      float leftVal = left.floatValue();
+      float rightVal = right.floatValue();
+      // only compare now if the values are special
+      if (Float.isNaN(leftVal) || Float.isNaN(rightVal) || Float.isFinite(leftVal) || Float.isFinite(rightVal)) {
+        return Float.compare(leftVal, rightVal) != 0;
+      }
+    }
+
+    // not special
+    return null;
+  }
+
+  private @Nullable BigDecimal toBigDecimal(@NonNull Number number) {
+    // check if we need to convert here
+    if (number instanceof BigDecimal) {
+      return (BigDecimal) number;
+    }
+
+    // convert a big integer
+    if (number instanceof BigInteger) {
+      return new BigDecimal((BigInteger) number);
+    }
+
+    // convert a non-floating number
+    if (number instanceof Byte || number instanceof Short
+      || number instanceof Integer || number instanceof Long) {
+      return new BigDecimal(number.longValue());
+    }
+
+    // ensure the correctness of floating-point numbers
+    if (number instanceof Float || number instanceof Double) {
+      return BigDecimal.valueOf(number.doubleValue());
+    }
+
+    try {
+      // try to convert the number from a string, if possible
+      return new BigDecimal(number.toString());
+    } catch (Exception ignored) {
+      // no chance
+      return null;
     }
   }
 }
