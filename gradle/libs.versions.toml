@@ -7,7 +7,7 @@ spotless = "6.11.0"
 nexusPublish = "1.1.0"
 
 # general
-lombok = "1.18.24"
+lombok = "1.18.28"
 annotations = "24.0.0"
 
 # testing
