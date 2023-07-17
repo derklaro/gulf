@@ -3,7 +3,7 @@ metadata.format.version = "1.1"
 [versions]
 
 # plugins
-spotless = "6.11.0"
+spotless = "6.20.0"
 nexusPublish = "1.1.0"
 
 # general
