@@ -58,7 +58,7 @@ extensions.configure<JavaPluginExtension> {
 }
 
 extensions.configure<CheckstyleExtension> {
-  toolVersion = "10.3.4"
+  toolVersion = libs.versions.checkstyleTools.get()
 }
 
 extensions.configure<PublishingExtension> {

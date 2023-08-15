@@ -1,17 +1,16 @@
-metadata.format.version = "1.1"
-
 [versions]
 
 # plugins
-spotless = "6.11.0"
-nexusPublish = "1.1.0"
+spotless = "6.20.0"
+nexusPublish = "2.0.0-rc-1"
+checkstyleTools = "10.12.2"
 
 # general
-lombok = "1.18.24"
-annotations = "24.0.0"
+lombok = "1.18.28"
+annotations = "24.0.1"
 
 # testing
-junit = "5.9.1"
+junit = "5.10.0"
 
 
 [libraries]
@@ -23,6 +22,9 @@ annotations = { group = "org.jetbrains", name = "annotations", version.ref = "an
 # junit
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+
+# dummy versions, just here for renovate to detect that there is something to update
+checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
 
 
 [bundles]
