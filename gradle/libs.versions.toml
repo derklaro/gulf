@@ -7,7 +7,7 @@ checkstyleTools = "10.12.2"
 
 # general
 lombok = "1.18.28"
-annotations = "24.0.1"
+annotations = "24.1.0"
 
 # testing
 junit = "5.10.0"
