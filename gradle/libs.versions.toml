@@ -1,7 +1,7 @@
 [versions]
 
 # plugins
-spotless = "6.20.0"
+spotless = "6.25.0"
 nexusPublish = "2.0.0-rc-1"
 checkstyleTools = "10.12.2"
 
