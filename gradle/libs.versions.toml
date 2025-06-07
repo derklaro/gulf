@@ -10,7 +10,7 @@ lombok = "1.18.28"
 annotations = "24.0.1"
 
 # testing
-junit = "5.10.1"
+junit = "5.13.1"
 
 
 [libraries]
