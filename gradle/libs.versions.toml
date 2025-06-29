@@ -3,7 +3,7 @@
 # plugins
 spotless = "6.20.0"
 nexusPublish = "2.0.0-rc-1"
-checkstyleTools = "10.12.2"
+checkstyleTools = "10.26.1"
 
 # general
 lombok = "1.18.28"
