@@ -40,7 +40,11 @@ final class CustomGulfSettingsTest {
     SeedB left = new SeedB(1, 'c', UUID.randomUUID(), "Google");
     SeedB right = new SeedB(1, 'c', UUID.randomUUID(), "Google");
 
-    Gulf gulf = Gulf.builder().rootPathIndicator("§").pathSeparatorIndicator("__").build();
+    Gulf gulf = Gulf.builder()
+      .rootPathIndicator("§")
+      .pathSeparatorIndicator("__")
+      .withLookup(SeedB.class, SeedB.LOOKUP)
+      .build();
 
     Collection<Change<Object>> changes = gulf.findChanges(left, right);
     Assertions.assertEquals(1, changes.size());
@@ -54,7 +58,11 @@ final class CustomGulfSettingsTest {
     SeedB left = new SeedB(1, 'c', UUID.randomUUID(), "Google");
     SeedB right = new SeedB(1, 'c', UUID.randomUUID(), "Google");
 
-    Gulf gulf = Gulf.builder().rootPathIndicator("").pathSeparatorIndicator("__").build();
+    Gulf gulf = Gulf.builder()
+      .rootPathIndicator("")
+      .pathSeparatorIndicator("__")
+      .withLookup(SeedB.class, SeedB.LOOKUP)
+      .build();
 
     Collection<Change<Object>> changes = gulf.findChanges(left, right);
     Assertions.assertEquals(1, changes.size());

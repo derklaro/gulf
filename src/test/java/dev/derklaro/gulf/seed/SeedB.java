@@ -24,9 +24,12 @@
 
 package dev.derklaro.gulf.seed;
 
+import java.lang.invoke.MethodHandles;
 import java.util.UUID;
 
 public final class SeedB {
+
+  public static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 
   private final int i;
   private final char c;

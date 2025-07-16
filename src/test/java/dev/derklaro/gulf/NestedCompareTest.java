@@ -92,7 +92,10 @@ final class NestedCompareTest {
         "TestingA", Collections.singleton(new SeedB(1234567, 'z', randomId, "Google!")),
         "TestingC", Collections.singleton(new SeedB(1236745, 'e', randomId, "Bing"))));
 
-    Gulf gulf = Gulf.builder().build();
+    Gulf gulf = Gulf.builder()
+      .withLookup(SeedA.class, SeedA.LOOKUP)
+      .withLookup(SeedB.class, SeedB.LOOKUP)
+      .build();
     Collection<Change<Object>> changes = gulf.findChanges(left, right);
 
     Assertions.assertEquals(4, changes.size());

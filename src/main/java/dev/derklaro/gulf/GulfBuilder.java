@@ -28,12 +28,16 @@ import dev.derklaro.gulf.finder.DiffFinder;
 import dev.derklaro.gulf.internal.Internals;
 import dev.derklaro.gulf.supplier.DefaultSupplier;
 import dev.derklaro.gulf.type.TypeMatcher;
+import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import lombok.NonNull;
 
 public final class GulfBuilder {
+
+  final Map<Class<?>, MethodHandles.Lookup> lookupPerType = new HashMap<>();
 
   final Set<Map.Entry<TypeMatcher, DiffFinder<?>>> diffFinders = new LinkedHashSet<>();
   final Set<Map.Entry<TypeMatcher, DefaultSupplier>> defaultSuppliers = new LinkedHashSet<>();
@@ -61,6 +65,11 @@ public final class GulfBuilder {
 
   public @NonNull GulfBuilder pathSeparatorIndicator(@NonNull String pathSeparatorIndicator) {
     this.pathSeparatorIndicator = pathSeparatorIndicator;
+    return this;
+  }
+
+  public @NonNull GulfBuilder withLookup(@NonNull Class<?> type, @NonNull MethodHandles.Lookup lookup) {
+    this.lookupPerType.put(type, lookup);
     return this;
   }
 

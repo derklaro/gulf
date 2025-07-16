@@ -52,11 +52,13 @@ public interface DiffFinder<T> {
         return Changes.singleton(change);
       }
     }
+
     // delegate to the null safe method
     return this.findChangesNullSafe(gulf, path, fullType, left, right);
   }
 
-  @NonNull Collection<Change<T>> findChangesNullSafe(
+  @NonNull
+  Collection<Change<T>> findChangesNullSafe(
     @NonNull Gulf gulf,
     @NonNull ObjectPath path,
     @NonNull Type fullType,

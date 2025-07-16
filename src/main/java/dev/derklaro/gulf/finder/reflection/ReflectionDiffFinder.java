@@ -52,7 +52,7 @@ public final class ReflectionDiffFinder implements DiffFinder<Object> {
   ) {
     Collection<Map.Entry<Field, MethodHandle>> reflectionData = this.reflectionCache.computeIfAbsent(
       left.getClass(),
-      ReflectionDataLookup::findFields);
+      clazz -> ReflectionDataLookup.findFields(clazz, gulf.lookupPerType()));
 
     // compare both types based on the reflection data
     Collection<Change<Object>> changes = new ArrayList<>();

@@ -38,19 +38,22 @@ import org.jetbrains.annotations.Nullable;
 
 final class ReflectionDataLookup {
 
-  private static final MethodHandles.Lookup LOOKUP = ImplLookupAccess.findLookup();
   private static final MethodType GETTER_GENERIC_TYPE = MethodType.methodType(Object.class, Object.class);
 
   private ReflectionDataLookup() {
     throw new UnsupportedOperationException();
   }
 
-  public static @NonNull Collection<Map.Entry<Field, MethodHandle>> findFields(@NonNull Class<?> clazz) {
+  public static @NonNull Collection<Map.Entry<Field, MethodHandle>> findFields(
+    @NonNull Class<?> clazz,
+    @NonNull Map<Class<?>, MethodHandles.Lookup> lookupPerType
+  ) {
     Collection<Map.Entry<Field, MethodHandle>> fields = new LinkedHashSet<>();
     do {
       for (Field field : clazz.getDeclaredFields()) {
         if (!Modifier.isStatic(field.getModifiers())) {
-          MethodHandle handle = fieldHandleIfAccessible(field);
+          MethodHandles.Lookup lookup = lookupPerType.getOrDefault(field.getDeclaringClass(), ImplLookupAccess.LOOKUP);
+          MethodHandle handle = fieldHandleIfAccessible(field, lookup);
           if (handle != null) {
             fields.add(Internals.newMapEntry(field, handle));
           }
@@ -61,10 +64,18 @@ final class ReflectionDataLookup {
     return fields;
   }
 
-  private static @Nullable MethodHandle fieldHandleIfAccessible(@NonNull Field field) {
+  private static @Nullable MethodHandle fieldHandleIfAccessible(
+    @NonNull Field field,
+    @NonNull MethodHandles.Lookup lookup
+  ) {
     try {
-      // unreflect the field and convert it to a generic handle
-      return LOOKUP.unreflectGetter(field).asType(GETTER_GENERIC_TYPE);
+      // also try to set accessible, if possible
+      field.setAccessible(true);
+    } catch (Exception ignored) {
+    }
+
+    try {
+      return lookup.unreflectGetter(field).asType(GETTER_GENERIC_TYPE);
     } catch (Exception exception) {
       return null;
     }

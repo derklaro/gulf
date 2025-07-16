@@ -27,49 +27,22 @@ package dev.derklaro.gulf.finder.reflection;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import lombok.NonNull;
-import sun.misc.Unsafe;
 
 final class ImplLookupAccess {
 
-  private static final Object SOME_FIELD = new Object();
+  static final MethodHandles.Lookup LOOKUP = findLookup();
 
   private ImplLookupAccess() {
     throw new UnsupportedOperationException();
   }
 
-  public static @NonNull MethodHandles.Lookup findLookup() {
+  private static @NonNull MethodHandles.Lookup findLookup() {
     try {
-      // get the unsafe instance
-      Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-      theUnsafe.setAccessible(true);
-      Unsafe u = (Unsafe) theUnsafe.get(null);
-
-      // get the field (inaccessible)
-      Field inaccessibleField = ImplLookupAccess.class.getDeclaredField("SOME_FIELD");
-      // get the field (accessible)
-      Field accessibleField = ImplLookupAccess.class.getDeclaredField("SOME_FIELD");
-      accessibleField.setAccessible(true);
-
-      // find the offset for the "override" boolean
-      long offset = -1;
-      for (long off = 8; off < 128; off++) {
-        if (u.getByte(inaccessibleField, off) == 0 && u.getByte(accessibleField, off) == 1) {
-          offset = off;
-          break;
-        }
-      }
-
-      // check if we got the offset
-      if (offset != -1) {
-        // get the lookup field
-        Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
-        u.putByte(implLookupField, offset, (byte) 1);
-        return (MethodHandles.Lookup) implLookupField.get(null);
-      }
+      Field implLookup = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+      implLookup.setAccessible(true);
+      return (MethodHandles.Lookup) implLookup.get(null);
     } catch (Exception ignored) {
+      return MethodHandles.lookup();
     }
-
-    // unable to get the trusted lookup instance
-    return MethodHandles.lookup();
   }
 }

@@ -47,17 +47,23 @@ import dev.derklaro.gulf.supplier.DefaultSupplier;
 import dev.derklaro.gulf.supplier.DefaultSuppliers;
 import dev.derklaro.gulf.type.TypeMatcher;
 import dev.derklaro.gulf.type.TypeMatchers;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.NonNull;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 public final class Gulf {
 
+  private final Map<Class<?>, MethodHandles.Lookup> lookupPerType;
   private final Set<Map.Entry<TypeMatcher, DiffFinder<?>>> diffFinders;
   private final Set<Map.Entry<TypeMatcher, DefaultSupplier>> defaultSuppliers;
 
@@ -70,6 +76,7 @@ public final class Gulf {
     // copy the maps
     this.diffFinders = new LinkedHashSet<>(builder.diffFinders);
     this.defaultSuppliers = new LinkedHashSet<>(builder.defaultSuppliers);
+    this.lookupPerType = Collections.unmodifiableMap(new HashMap<>(builder.lookupPerType));
 
     // build the path factory
     this.pathFactory = new DefaultPathFactory(builder.rootPathIndicator, builder.pathSeparatorIndicator);
@@ -155,5 +162,11 @@ public final class Gulf {
 
     // check the equality between the given objects
     return diffFinder.findChanges(this, path, objectType, left, right);
+  }
+
+  @Unmodifiable
+  @ApiStatus.Internal
+  public @NonNull Map<Class<?>, MethodHandles.Lookup> lookupPerType() {
+    return this.lookupPerType;
   }
 }

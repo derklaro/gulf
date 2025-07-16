@@ -24,11 +24,14 @@
 
 package dev.derklaro.gulf.seed;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
 public final class SeedA {
+
+  public static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 
   private final UUID id;
 
