@@ -1,16 +1,17 @@
 [versions]
 
 # plugins
-spotless = "6.20.0"
-nexusPublish = "2.0.0-rc-1"
-checkstyleTools = "10.12.2"
+spotless = "7.1.0"
+nexusPublish = "2.0.0"
+checkstyleTools = "10.26.1"
 
 # general
-lombok = "1.18.28"
-annotations = "24.0.1"
+lombok = "1.18.38"
+annotations = "26.0.2"
 
 # testing
-junit = "5.10.1"
+junit = "5.13.3"
+junitLauncher = "1.13.3"
 
 
 [libraries]
@@ -22,6 +23,7 @@ annotations = { group = "org.jetbrains", name = "annotations", version.ref = "an
 # junit
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junitLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitLauncher" }
 
 # dummy versions, just here for renovate to detect that there is something to update
 checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
@@ -29,7 +31,7 @@ checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version
 
 [bundles]
 
-junit = ["junitApi", "junitEngine"]
+junit = ["junitApi", "junitEngine", "junitLauncher"]
 
 
 [plugins]
