@@ -6,7 +6,7 @@ nexusPublish = "2.0.0"
 checkstyleTools = "10.26.1"
 
 # general
-lombok = "1.18.38"
+lombok = "1.18.42"
 annotations = "26.0.2"
 
 # testing
