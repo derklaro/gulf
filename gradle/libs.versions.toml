@@ -10,8 +10,8 @@ lombok = "1.18.38"
 annotations = "26.0.2"
 
 # testing
-junit = "5.13.3"
-junitLauncher = "1.13.3"
+junit = "5.14.0"
+junitLauncher = "1.14.0"
 
 
 [libraries]
