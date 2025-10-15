@@ -11,7 +11,7 @@ plugins {
 
 defaultTasks("build", "test", "jar")
 
-version = "0.0.1"
+version = "0.0.2-SNAPSHOT"
 group = "dev.derklaro.gulf"
 
 repositories {
